@@ -77,7 +77,7 @@ Example:
 
 In the next part, you will see the clusters visualizations. 
 
-![Cluster visualization](./assets/cluster_viz_app.png)    
+![Cluster visualization](./assets/Cluster_viz_app.png)    
   
   
 You can save the image and download the data. 
