@@ -31,28 +31,40 @@ Or you can install the libraries on the requirements.txt from your terminal:
 
 
 ## Workflow
+  
+Data Exploration.  
+
+Data Cleaning: 
+   - Remove outliers
+   - Data since February 2022.
+
+Feature Engineering:
+   - Selected, transformed, extracted, combined, and manipulated raw data to generate the desired variables for analysis or predictive modelling.
+   - More than 40 variables were created.
+
+Variance Threshold Analysis:
+  - Remove highly correlated variables.
+
+Principal Components Analysis.  
+  - Dimensionality-reduction method.
+  - Two Principal Components that explain the variance above 85%.
+  
+Cluster Analysis.  
+  - K-Means Algorithm.
+  
+App.  
+  - Streamlit app.
+
+  
 
 ![workflow](./assets/workflow.png)
 
 
-## App
+## App  
+
 To run the app use `streamlit run app.py` from the terminal and your directory.
 
-As soon as you run the script, a local Streamlit server will spin up and your app will open in a new tab in your default web browser.  
-  
-Data Exploration.
-
-Data Cleaning: 
-   - Remove outliers
-   - Data since Febreruary 2022.
-
-Feature Ingeneering:
-   - Selected, transformed, extracted, combined, and manipulated raw data to generate the desired variables for analysis or predictive modeling.
-   - More than 40 variables were created.
-
-Variance Threshold:
-   -
-
+As soon as you run the script, a local streamlit server will spin up and your app will open in a new tab in your default web browser.  
 
 ![app](./assets/app.png)
    
@@ -64,7 +76,7 @@ You can upload the file with the variables and select variables.
 In case you have selected PCA, in the first section, you can visualize the following three plots:
 
 - Explained Variance PC
-- KElbow Visualizer
+- K Elbow Visualizer
 - Silhouette score
 
 Otherwise, will be only displayed the last two ones.   
@@ -77,7 +89,7 @@ Example:
 
 In the next part, you will see the clusters visualizations. 
 
-![Cluster visualization](./assets/cluster_viz_app.png)    
+![Cluster visualization](./assets/Cluster_viz_app.png)    
   
   
 You can save the image and download the data. 
@@ -86,8 +98,23 @@ This image shows the proposed clustering using the K-Means algorithm.
   ![Cluster image](./assets/cluster_img_app.png)    
 
 
+## Conclusion:  
+
+After have been working in this project for three months, we found interesting insights, and reach the goal.   
+
+The app is ready to use locally. The user can add more variables and play with the it.
+
 ## Learned lessons
 
-I gain more coding and plotting experience.
+Work towards specific goals in a short period of time.  
+
+Plot using plotly express.  
+
+Build a streamlit application.  
+  
+    
+  
+  
+
 
 
