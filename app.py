@@ -15,7 +15,7 @@ import sklearn.metrics as metrics
 from sklearn.decomposition import PCA
 from scipy import interpolate
 from scipy.spatial import ConvexHull
-from scipy.spatial.qhull import QhullError
+from scipy.spatial import QhullError
 
 st.set_page_config(layout="wide")
 left, middle, right = st.columns([1, 5, 1])
@@ -59,7 +59,7 @@ with middle:
         ]
 
     sidebar = st.sidebar
-    st.sidebar.title('Selec Data')
+    st.sidebar.title('Select Data')
 
     with st.form('form'):
         features = sidebar.multiselect("Select variables", columns, help='Select a variable.')  
@@ -99,23 +99,24 @@ with middle:
                     tdf["cluster"] = y_kmeans 
 
                     fig = go.Figure()
-                    trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers', text=tdf["Quartier"],
+                    trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers+text', text=tdf["Quartier"],
+                                        textposition="top center",
+                                        textfont_size=11,
                                         marker=dict(
+                                                size=tdf.avg_visits_perSensor,
                                                 color=tdf.cluster.apply(lambda x: colors[x]),
-                                                size=9,
-                                                showscale=True,
+                                                sizemode='area',
+                                                sizeref=3.*max(tdf.avg_visits_perSensor)/30.**2,
                                                 opacity = 0.9,
-                                                reversescale = True,
-                                                symbol = 'pentagon'
                                                 ),
-                                        name="Zone")  
-
+                                        name="Zone", )  
+                                    
                     trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],
                                         mode='markers', 
                                         marker=dict(
                                             color=colors,
                                             size=10,
-                                            symbol="circle",
+                                            symbol="diamond",
                                             showscale=True,
                                             line = dict(
                                                 width=1,
@@ -127,7 +128,7 @@ with middle:
                     data7 = go.Data([trace0, trace1])
                     fig = go.Figure(data=data7)
                     layout = go.Layout(
-                                height=600, width=1000, title=f"K-Means cluster size {c}",
+                                height=600, width=700, title=f"K-Means cluster size {c}",
                                 xaxis=dict(
                                     title=features[0],
                                 ),
@@ -150,6 +151,7 @@ with middle:
 
             if use_pca=="Yes":
                 st.markdown("### Using PCA") 
+                tdf= udf.copy()
                 X = tdf[features]  
                 pca = PCA(n_components=int(comp))
                 principalComponents = pca.fit_transform(X)  
@@ -178,17 +180,22 @@ with middle:
                         X["cluster"] = y_kmeans
                         fig = go.Figure()
                         fig = px.scatter(x=X[choosed_component[0]],y=X[choosed_component[1]],  
+                            size=tdf.avg_visits_perSensor,
                             color= X.cluster,
-                            text=tdf["Quartier"], 
-                            labels={'color': 'Cluster', 'text': 'Quartier'},
+                            text=tdf["shop"], 
+                            labels={'color': 'Cluster', 'text': 'Shop'},
                             opacity = 1,
                             ) 
                         
                         fig.update_layout(legend_title='Zones, centers')
-                        fig.update_traces(marker_size = 9, marker_symbol="pentagon", marker_color= X.cluster.apply(lambda x: colors[x]), 
-                                        showlegend=False)
-                        fig.update_traces(textposition='top center', textfont_size=11, showlegend=True, name='Zone')
-                        fig.update_layout(uniformtext_minsize=6, uniformtext_mode='hide') 
+                        fig.update_traces(marker_color= X.cluster.apply(lambda x: colors[x]), 
+                                        marker_size=tdf.avg_visits_perSensor,
+                                        marker_sizemode='area',
+                                        marker_sizeref=3.*max(tdf.avg_visits_perSensor)/30.**2,
+                                        showlegend=False)  
+                        
+                        fig.update_traces(textposition='top center', textfont_size=12, showlegend=True, name='Zone')
+                        fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide') 
 
                         for i in X.cluster.unique():
                             # get the convex hull
@@ -234,18 +241,18 @@ with middle:
                             y=ys[i], 
                             text = varnames,
                             showarrow=False,
-                            font_size=10, font_color='blue', 
+                            font_size=12, font_color='blue', 
                             xanchor='left',
                             yanchor='bottom'
                         )
 
                         fig.add_traces(px.scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1]).data[0] )
                         fig.update_traces(marker_size=11, marker_color=colors, marker_symbol = 'diamond', 
-                                        marker_line=dict(width=1, color='red'), selector=dict(mode='markers'), showlegend=True, name='Center cluster')
+                                        marker_line=dict(width=1, color='rgb(255,127,0)'), selector=dict(mode='markers'), showlegend=True, name='Cluster center')
                     
 
                 
-                        layout = go.Layout(height=600, width=1000, 
+                        layout = go.Layout(height=650, width=700, 
                                     title=f"K-Means Cluster size {c} \n Total explained variance: {pca.explained_variance_ratio_.sum()*100:.2f}%",
                                     xaxis=dict(
                                         title=f"PC {choosed_component[0]} Explained variance {pca.explained_variance_ratio_[0]*100:.2f}%",
