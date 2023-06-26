@@ -102,7 +102,7 @@ This image shows the proposed clustering using the K-Means algorithm.
 
 After have been working in this project for three months, we found interesting insights, and reach the goal.   
 
-The app is ready to use locally. The user can add more variables and play with the it.
+The app is ready to use locally. The user can add more variables and play with it.
 
 ## Learned lessons
 
